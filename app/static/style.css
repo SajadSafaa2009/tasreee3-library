@@ -61,9 +61,11 @@ main {
     color: white;
     justify-content: center;
     align-items: start;
-    padding-top: 10%;
-    font-size: clamp(8px,6vw,100px);
+    padding-top: 50px;
+    font-size: clamp(1rem,6vw,2rem);
     border: none;
+    max-width: 400px !important;
+    margin: 0 auto;
 }
 .subject-title-div{
     display: flex;
@@ -72,8 +74,9 @@ main {
     color: white;
     justify-content: center;
     align-items: start;
-    font-size: clamp(8px,6vw,100px);
+    font-size: clamp(1rem,6vw,2rem);
     border: none;
+    max-width: 400px !important;
 }
 .shorter-title{
     height: 45% !important;
@@ -97,8 +100,9 @@ main {
     align-items: start;
     flex-wrap: wrap;
     padding: 5%;
-    margin: 0;
+    margin: 0 auto;
     gap: 5%;
+    max-width: 600px !important;
 }
 .home-button{
     display: flex;
@@ -106,28 +110,21 @@ main {
     backdrop-filter: blur(15px) !important;
     height: 10vh;
     width: 40%;
-    font-size: clamp(8px, 1vw + 2.5vh, 96px);
+    font-size: 1.5rem;
     color: var(--text);     
     align-items: center;
     justify-content: center;
     margin: 0;
     padding: 0;
-    border: 1px solid var(--border);
+    border: 1px solid var(--bg-light);
     background: linear-gradient(80deg, var(--bg-light-transparent) , var(--bg-light2-transparent));
-    border-radius: 30px;
-    box-shadow: 0px 5px 4px 5px rgba(3, 3, 3, 0.149);
+    border-radius: 15px;
+    box-shadow: 0px 5px 4px 2px rgba(3, 3, 3, 0.137);
     text-decoration: none;
-    transition: all 0.2s ease-in-out;
+
 }
-.home-button:active{
-    transform: translateY(4px);
-    transition: all 0.2s ease-in-out;
-}
-.home-button:visited,
-.home-button:hover,
-.home-button:active {
-    text-decoration: none;
-}.form-card{
+
+.form-card{
     display: flex;
     justify-content: start;
     align-items: center;
@@ -232,18 +229,19 @@ main {
     display: flex;
     height: 10vh;
     width: 100%;
-    border-top: 3px solid var(--border-muted);
-    border-bottom: 3px solid var(--border-muted);
+    border-top: 1px solid var(--border-muted);
+    border-bottom: 1px solid var(--border-muted);
     gap: 0.1%;
+    justify-content: space-between;
 }
 .middle-navbar-div button{
     display: flex;
     height: 100%;
-    width: 33.3%;
+    width: 33.2%;
     
     border: none;
     background: var(--bg-light);
-    font-size: clamp(8px,6vw,100px);
+    font-size: 1.7rem;
     color: var(--text);
     justify-content: center;
     align-items: center;
@@ -267,17 +265,17 @@ main {
 .source-div{
     display: flex;
     flex: 0 0 auto;
-    min-height: 12vh;
+    min-height: 10vh;
     height: auto;
     width: 95%;
     margin-bottom: 1vh;
-    border-radius: 30px;
+    border-radius: 15px;
     align-items: start;
     justify-content: start;
     padding: 10px;
     font-size: 2rem;
     color: var(--text);
-    border: 1px solid var(--border);
+    border: 1px solid var(--bg-light);
     direction: rtl;
     gap: 10px;
     background: linear-gradient(80deg, var(--bg-light-transparent2) , var(--bg-light2-transparent2));
@@ -463,6 +461,7 @@ main {
 }
 .background-image{
     width: 110vw;
+    
     position: absolute;
     aspect-ratio: 1/1;
     top: 32vh;
@@ -515,24 +514,23 @@ main{
     border-radius: 50%;
     border: none;
     box-shadow: 0px 2px 4px 4px rgba(3, 3, 3, 0.149);
-    height: 8vw;
+    height: 40px;
     aspect-ratio: 1/1;
-    padding: 1%;
+    padding: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 5;
-
 }
 .back-button{
     position: absolute;
-    top: 30px;
-    left: 30px;
+    top: 10px;
+    left: 10px;
 }
 .list-button{
     position: absolute;
-    top: 30px;
-    right: 30px;
+    top:10px;
+    right: 10px;
 }
 #side-panel{
     position: absolute;
