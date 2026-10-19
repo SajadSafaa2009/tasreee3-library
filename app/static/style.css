@@ -101,7 +101,7 @@ main {
     align-content: space-evenly;
     align-items: start;
     flex-wrap: wrap;
-    padding: 5%;
+    padding: 10px;
     margin: 0 auto;
     gap: 5%;
     max-width: 600px !important;
@@ -480,7 +480,7 @@ main {
     
     position: absolute;
     aspect-ratio: 1/1;
-    top: 32vh;
+    bottom: clamp(-70vh, 5vw, 40vh);
     left: 0;
     rotate: 10deg;
     z-index: -1;
@@ -560,6 +560,7 @@ main{
     z-index: 10;
     opacity: 0;
     transition: all 0.2s ease-in-out;
+    max-width: 500px;
 }
 .side-panel-unveiled{
     width: 65vw !important;
@@ -617,7 +618,7 @@ main{
     filter: brightness(0) invert(1);
 }
 .side-panel-button-p{
-    font-size: clamp(8px, 6vw, 100px);
+    font-size: 1.7rem;
     text-align: right;
 }
 
@@ -739,6 +740,7 @@ input[type="checkbox"] {
     overflow: hidden;
     box-shadow: 0px 5px 4px 5px rgba(3, 3, 3, 0.149);
     margin: auto;
+    max-width: 500px !important;
 }
 .about-card p{
     font-size: 1rem;
@@ -771,8 +773,8 @@ input[type="checkbox"] {
     width: 100%;
     margin-bottom: 2vh;
     border-radius: 30px;
-    align-items: start;
-    justify-content: start;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
     padding: 20px;
     color: var(--text);
@@ -782,10 +784,13 @@ input[type="checkbox"] {
     background: none;
     overflow: hidden;
     margin: auto;
+    
+    
 }
 .about-button{
     width: 95%;
     height: 45%;
+    max-width: 500px !important;
     margin: auto;
     background: linear-gradient(
         130deg,
@@ -801,7 +806,7 @@ input[type="checkbox"] {
 .about-button h5{
     text-align: start;
     direction: rtl;
-    font-size: clamp(6px, 4.5vw, 128px);
+    font-size: 1.3rem;
 }
 .about-img{
     width: 15% !important;
