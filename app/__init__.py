@@ -4,7 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-testing = False
+testing = True
 def create_app():
     app = Flask(__name__)
 
