@@ -742,7 +742,7 @@ input[type="checkbox"] {
     max-width: 500px !important;
 }
 .about-card p{
-    font-size: 1rem;
+    font-size: clamp(0.7rem,1.95vh,2rem);
     text-align: justify;
     text-align-last: right;
     margin-left:3%;

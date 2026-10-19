@@ -1,10 +1,10 @@
-
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-testing = False
+testing = os.environ.get("DATABASE_URL") == None
+
 def create_app():
     app = Flask(__name__)
 
