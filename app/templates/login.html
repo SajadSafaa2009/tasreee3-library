@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Login</title>
+</head>
+<body>
+    <h1>Admin Login</h1>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label for="username">Username</label>
+        <input id="username" name="username" required autocomplete="username">
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password"
+               required autocomplete="current-password">
+
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>

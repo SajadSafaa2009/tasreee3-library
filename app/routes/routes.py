@@ -1,26 +1,86 @@
+
+import os
+from functools import wraps
 from flask import (
     Blueprint,
-    app,
     render_template,
     redirect,
     url_for,
     request,
     make_response,
+    session,
 )
-from app.services.services import add_tip, get_sources, get_tips, get_videos ,get_articles
+from werkzeug.security import check_password_hash
+from app.services.services import (
+    add_tip,
+    get_sources,
+    get_tips,
+    get_videos,
+    get_articles,
+)
 
 routes = Blueprint("routes", __name__)
 
 
+def admin_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("routes.login", next=request.path))
+        return view(*args, **kwargs)
+    return wrapped_view
+
+
 @routes.before_request
 def check_cookies():
-    if request.endpoint == "routes.grade" or request.endpoint == "routes.set_cookie":
+    if request.endpoint in (
+        "routes.grade",
+        "routes.set_cookie",
+        "routes.login",
+        "routes.logout",
+    ):
         return
 
     if not request.cookies.get("grade-cookie") or not request.cookies.get(
         "study-type-cookie"
     ):
         return redirect(url_for("routes.grade"))
+
+
+@routes.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        expected_username = os.environ.get("ADMIN_USERNAME", "")
+        password_hash = os.environ.get("ADMIN_PASSWORD_HASH", "")
+
+        if (
+            expected_username
+            and password_hash
+            and username == expected_username
+            and check_password_hash(password_hash, password)
+        ):
+            session.clear()
+            session["admin_logged_in"] = True
+
+            next_url = request.args.get("next", "")
+            if next_url.startswith("/") and not next_url.startswith("//"):
+                return redirect(next_url)
+
+            return redirect(url_for("routes.add"))
+
+        error = "Invalid username or password."
+
+    return render_template("login.html", error=error)
+
+
+@routes.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return redirect(url_for("routes.login"))
 
 
 @routes.route("/")
@@ -47,7 +107,7 @@ def iq():
 @routes.route("/subjects")
 def subjects():
     grade = request.cookies.get("grade-cookie")
-    return render_template("subjects.html",grade=grade)
+    return render_template("subjects.html", grade=grade)
 
 
 @routes.route("/subject")
@@ -59,79 +119,79 @@ def subject():
     tips = get_tips(origin=origin, grade=grade, study_type=study_type)
     videos = get_videos(origin=origin, grade=grade, study_type=study_type)
 
-    origin_arabic = ""
-    if origin == "math":
-        origin_arabic = "الرياضيات"
-    elif origin == "biology":
-        origin_arabic = "الاحياء"
-    elif origin == "chemistry":
-        origin_arabic = "الكيمياء"
-    elif origin == "physics":
-        origin_arabic = "الفيزياء"
-    elif origin == "english":
-        origin_arabic = "اللغة الانكليزية"
-    elif origin == "arabic":
-        origin_arabic = "اللغة العربية"
-    elif origin == "french":
-        origin_arabic = "اللغة الفرنسية"
-    elif origin == "religion":
-        origin_arabic = "التربية الاسلامية"
-    elif origin == "math2":
-        origin_arabic = "الرياضيات"
-    elif origin == "physics2":
-        origin_arabic = "الفيزياء"
-    elif origin == "chemistry2":
-        origin_arabic = "الكيمياء"
-    elif origin == "biology2":
-        origin_arabic = "الاحياء"
-        
+    origins = {
+        "math": "الرياضيات",
+        "biology": "الاحياء",
+        "chemistry": "الكيمياء",
+        "physics": "الفيزياء",
+        "english": "اللغة الانكليزية",
+        "arabic": "اللغة العربية",
+        "french": "اللغة الفرنسية",
+        "religion": "التربية الاسلامية",
+        "math2": "الرياضيات",
+        "physics2": "الفيزياء",
+        "chemistry2": "الكيمياء",
+        "biology2": "الاحياء",
+    }
+
     return render_template(
         "subject.html",
         sources=sources,
         tips=tips,
         videos=videos,
-        origin_arabic=origin_arabic,
+        origin_arabic=origins.get(origin, ""),
     )
 
 
 @routes.route("/postsubjects")
 def postsubjects():
     grade = request.cookies.get("grade-cookie")
-    return render_template("subjects2.html",grade=grade)
+    return render_template("subjects2.html", grade=grade)
 
 
 @routes.route("/news")
 def news():
     articles = get_articles()
-    return render_template("news.html",articles=articles)
+    return render_template("news.html", articles=articles)
 
 
 @routes.route("/about")
 def about():
     return render_template("about.html")
 
+
 @routes.route("/add")
+@admin_required
 def add():
     return render_template("add.html")
 
+
 @routes.route("/add_source")
-def add_source():
+@admin_required
+def add_source_page():
     return render_template("add source.html")
 
+
 @routes.route("/add_advice")
+@admin_required
 def add_advice():
     return render_template("add tip.html")
 
+
 @routes.route("/add_video")
-def add_video():
+@admin_required
+def add_video_page():
     return render_template("add video.html")
 
+
 @routes.route("/add_article")
-def add_article():
+@admin_required
+def add_article_page():
     return render_template("add article.html")
 
 
 @routes.route("/source/create", methods=["POST"])
+@admin_required
 def create_source():
     study_type = request.form.get("study_type") == "true"
     grade = request.form.get("grade") == "true"
@@ -144,11 +204,16 @@ def create_source():
 
     from app.services.services import add_source
 
-    add_source(study_type, grade, origin, text, author, link, significance, description)
+    add_source(
+        study_type, grade, origin, text, author, link,
+        significance, description
+    )
 
     return redirect(url_for("routes.add"))
 
+
 @routes.route("/video/create", methods=["POST"])
+@admin_required
 def create_video():
     study_type = request.form.get("study_type") == "true"
     grade = request.form.get("grade") == "true"
@@ -161,12 +226,16 @@ def create_video():
 
     from app.services.services import add_video
 
-    add_video(study_type, grade, origin, text, author, link, significance, description)
+    add_video(
+        study_type, grade, origin, text, author, link,
+        significance, description
+    )
 
     return redirect(url_for("routes.add"))
 
 
 @routes.route("/tip/create", methods=["POST"])
+@admin_required
 def create_tip():
     study_type = request.form.get("study_type") == "true"
     grade = request.form.get("grade") == "true"
@@ -176,22 +245,24 @@ def create_tip():
     significance = int(request.form.get("significance", 1))
     title = request.form.get("title")
 
-    from app.services.services import add_video
-
-    add_tip(study_type, grade, origin, title, author, significance, text)
+    add_tip(
+        study_type, grade, origin, title, author, significance, text
+    )
 
     return redirect(url_for("routes.add"))
 
+
 @routes.route("/article/create", methods=["POST"])
+@admin_required
 def create_article():
     text = request.form.get("text")
     title = request.form.get("title")
     date = request.form.get("date")
     important = request.form.get("important") == "on"
-    
+
     from app.services.services import add_article
 
-    add_article(title,text,date,important)
+    add_article(title, text, date, important)
 
     return redirect(url_for("routes.add"))
 
@@ -202,17 +273,9 @@ def set_cookie():
     study_type = request.args.get("study_type")
 
     response = make_response(redirect(url_for("routes.home")))
-
+    response.set_cookie("grade-cookie", grade, max_age=60 * 60 * 24 * 30)
     response.set_cookie(
-        "grade-cookie",
-        grade,
-        max_age=60 * 60 * 24 * 30,
-    )
-
-    response.set_cookie(
-        "study-type-cookie",
-        study_type,
-        max_age=60 * 60 * 24 * 30,
+        "study-type-cookie", study_type, max_age=60 * 60 * 24 * 30
     )
 
     return response

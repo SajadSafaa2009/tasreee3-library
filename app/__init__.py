@@ -8,6 +8,11 @@ testing = os.environ.get("DATABASE_URL") == None
 def create_app():
     app = Flask(__name__)
 
+    app.config["SECRET_KEY"] = os.environ["SECRET_KEY"]
+    app.config["SESSION_COOKIE_HTTPONLY"] = True
+    app.config["SESSION_COOKIE_SECURE"] = not app.debug
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+        
     from app.routes import routes
     app.register_blueprint(routes)
     if testing :
@@ -26,8 +31,12 @@ def create_app():
 
     return app
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+
+
+    
+
+
+
+
 
