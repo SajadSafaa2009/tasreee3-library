@@ -1,5 +1,5 @@
 from app import db
-from app.models.models import Tip , Source , Article
+from app.models.models import Tip , Source , Article , Student
 
 def get_sources(origin, grade, study_type):
     return Source.query.filter(
@@ -71,4 +71,15 @@ def add_article(title,text,date,important):
         important=important
     )
     db.session.add(new_article)
+    db.session.commit()
+
+def add_student(name, text, year, username,group_link):
+    new_student = Student(
+        name=name,
+        text=text,
+        year=year,
+        username=username,
+        group_link=group_link
+    )
+    db.session.add(new_student)
     db.session.commit()

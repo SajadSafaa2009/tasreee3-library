@@ -189,6 +189,11 @@ def add_video_page():
 def add_article_page():
     return render_template("add article.html")
 
+@routes.route("/add_student")
+@admin_required
+def add_student_page():
+    return render_template("add student.html")
+
 
 @routes.route("/source/create", methods=["POST"])
 @admin_required
@@ -263,6 +268,22 @@ def create_article():
     from app.services.services import add_article
 
     add_article(title, text, date, important)
+
+    return redirect(url_for("routes.add"))
+
+@routes.route("/student/create", methods=["POST"])
+@admin_required
+def create_student():
+    name = request.form.get("name")
+    text = request.form.get("text")
+    year = request.form.get("year")
+    username = request.form.get("username")
+    group_link = request.form.get("group_link")
+    
+
+    from app.services.services import add_student
+
+    add_student(name, text, year, username,group_link)
 
     return redirect(url_for("routes.add"))
 

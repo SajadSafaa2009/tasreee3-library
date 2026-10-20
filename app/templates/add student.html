@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <main>
+        <form id="source-add-form" action="{{ url_for('routes.create_student') }}" method="POST">
+            <div class="form-card general-div">
+                <div class="form-title">
+                    <h1 style="font-size: 3rem;">اضافة طالب</h1>
+                </div>
+
+
+                
+                <div class="form-group">
+                    <p>الاسم:</p>
+                    <input type="text" name="name" placeholder="ادخل اسم الطالب هنا" required>
+                </div>
+
+                <div class="form-group">
+                    <p>السنة:</p>
+                    <input type="number" name="year" placeholder="ادخل السنة هنا" required>
+                </div>
+                
+                <div class="form-group" style="height: auto;">
+                    <p>النص:</p>
+                    <textarea rows="3" id="form-description-textarea" name="text" placeholder="ادخل الوصف هنا" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <p>username:</p>
+                    <input type="text" name="username" placeholder="" required>
+                </div>
+
+                <div class="form-group">
+                    <p>group_link:</p>
+                    <input type="text" name="group_link" placeholder="" required>
+                </div>
+                
+
+                <div class="form-main-button-group">
+                    <button  type="submit" class="form-main-button">اضافة</button>
+                </div>
+            </div>
+        </form>
+        
+    </main>
+</body>
+<script>
+    
+
+
+</script>
+</html>
