@@ -4,6 +4,9 @@ from app import db
 class Source(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
+    general_type = db.Column(db.Boolean, nullable=False,default=False)
+    general_grade = db.Column(db.Boolean, nullable=False,default=False)
+    
     study_type = db.Column(db.Boolean, nullable=False)
     grade = db.Column(db.Boolean, nullable=False)
     origin = db.Column(db.String(255), nullable=False)
@@ -20,6 +23,9 @@ class Source(db.Model):
 class Tip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
+    general_type = db.Column(db.Boolean, nullable=False,default=False)
+    general_grade = db.Column(db.Boolean, nullable=False,default=False)
+        
     study_type = db.Column(db.Boolean, nullable=False)
     grade = db.Column(db.Boolean, nullable=False)
     origin = db.Column(db.String(255), nullable=False)
@@ -38,4 +44,14 @@ class Article(db.Model):
     date = db.Column(db.Date, nullable=False)
     
     important  = db.Column(db.Boolean, nullable=False, default=False)
+
+class Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    
+    name = db.Column(db.String(255), nullable=False)
+    text = db.Column(db.Text, nullable=True)
+    year = db.Column(db.Integer, nullable=False)
+    
+    username = db.Column(db.String(255), nullable=True)
+    group_link = db.Column(db.String(2048), nullable=True)
 
