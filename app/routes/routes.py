@@ -206,12 +206,13 @@ def create_source():
     link = request.form.get("link")
     significance = int(request.form.get("significance", 1))
     description = request.form.get("description")
-
+    general_grade = request.form.get("general_grade") == "on"
+    general_type = request.form.get("general_type") == "on"
     from app.services.services import add_source
 
     add_source(
         study_type, grade, origin, text, author, link,
-        significance, description
+        significance, description,general_grade,general_type
     )
 
     return redirect(url_for("routes.add"))
@@ -228,12 +229,13 @@ def create_video():
     link = request.form.get("link")
     significance = int(request.form.get("significance", 1))
     description = request.form.get("description")
-
+    general_grade = request.form.get("general_grade") == "on"
+    general_type = request.form.get("general_type") == "on"
     from app.services.services import add_video
 
     add_video(
         study_type, grade, origin, text, author, link,
-        significance, description
+        significance, description,general_grade,general_type
     )
 
     return redirect(url_for("routes.add"))
@@ -249,9 +251,10 @@ def create_tip():
     author = request.form.get("author")
     significance = int(request.form.get("significance", 1))
     title = request.form.get("title")
-
+    general_grade = request.form.get("general_grade") == "on"
+    general_type = request.form.get("general_type") == "on"
     add_tip(
-        study_type, grade, origin, title, author, significance, text
+        study_type, grade, origin, title, author, significance, text,general_grade,general_type
     )
 
     return redirect(url_for("routes.add"))
