@@ -6,23 +6,18 @@ def get_sources(origin, grade, study_type):
     return Source.query.filter(
         Source.origin == origin,
         Source.video == False,
-        or_(
-            Source.general_grade == True,
-            Source.grade == grade
-        ),
-        or_(
-            Source.general_type == True,
-            Source.study_type == study_type
-        )
-    ).order_by(Source.significance.desc()).all()
-    
+        or_(Source.general_grade == True, Source.grade == grade),
+        or_(Source.general_type == True, Source.study_type == study_type)
+    ).order_by(Source.significance.desc(), Source.id.asc()).all()
+
+
 def get_videos(origin, grade, study_type):
     return Source.query.filter(
         Source.origin == origin,
         Source.video == True,
         or_(Source.general_grade == True, Source.grade == grade),
         or_(Source.general_type == True, Source.study_type == study_type)
-    ).order_by(Source.significance.desc()).all()
+    ).order_by(Source.significance.desc(), Source.id.asc()).all()
 
 
 def get_tips(origin, grade, study_type):
@@ -30,10 +25,11 @@ def get_tips(origin, grade, study_type):
         Tip.origin == origin,
         or_(Tip.general_grade == True, Tip.grade == grade),
         or_(Tip.general_type == True, Tip.study_type == study_type)
-    ).all()
-    
+    ).order_by(Tip.significance.desc(), Tip.id.asc()).all()
+
+
 def get_articles():
-    return Article.query.order_by(Article.date.desc()).all()
+    return Article.query.order_by(Article.date.desc(), Article.id.asc()).all()
 
 def add_source(study_type, grade, origin, text, author, link, significance, description,general_grade,general_type):
     new_source = Source(
