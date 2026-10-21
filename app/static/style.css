@@ -302,7 +302,12 @@ main {
     gap: 5px;
     background: linear-gradient(80deg, var(--bg-light-transparent2) , var(--bg-light2-transparent2));
     overflow: hidden;
+    transition: transform 0.3s ease, background-color 0.3s ease;
     box-shadow: 0px 5px 4px 5px rgba(3, 3, 3, 0.149);
+}
+.source-div:active{
+    transform: translateY(5px);
+    background-color: hsl(170, 89%, 41%);
 }
 
 .source-img-div{
