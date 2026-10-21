@@ -16,7 +16,7 @@ class Source(db.Model):
     author = db.Column(db.String(2048))
     link = db.Column(db.String(2048), nullable=False)
 
-    significance = db.Column(db.Integer, default=1)
+    significance = db.Column(db.Float, default=1.0)
     description = db.Column(db.Text)
 
 
@@ -33,7 +33,7 @@ class Tip(db.Model):
     text = db.Column(db.Text)
     author = db.Column(db.String(2048))
 
-    significance = db.Column(db.Integer, nullable=False, default=1)
+    significance = db.Column(db.Float, default=1.0)
     title = db.Column(db.Text, nullable=False)
 
 class Article(db.Model):
