@@ -20,9 +20,27 @@ def get_videos(origin, grade, study_type):
     ).order_by(Source.significance.desc(), Source.id.asc()).all()
 
 
+from sqlalchemy import or_
+
 def get_tips(origin, grade, study_type):
+    subject_origins = {"physics", "math", "biology", "chemistry"}
+    post_subject_origins = {
+        "english", "arabic", "french", "religion",
+        "math2", "physics2", "chemistry2", "biology2"
+    }
+
+    allowed_origins = [origin]
+
+    if origin in subject_origins:
+        allowed_origins.append("subjects")
+        allowed_origins.append("subjects+iq")
+    elif origin == "iq":
+        allowed_origins.append("subjects+iq")
+    elif origin in post_subject_origins:
+        allowed_origins.append("post-subjects")
+
     return Tip.query.filter(
-        Tip.origin == origin,
+        Tip.origin.in_(allowed_origins),
         or_(Tip.general_grade == True, Tip.grade == grade),
         or_(Tip.general_type == True, Tip.study_type == study_type)
     ).order_by(Tip.significance.desc(), Tip.id.asc()).all()
