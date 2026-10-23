@@ -283,6 +283,7 @@ main {
     max-height: 100%;
     overflow-y: auto !important;
     padding-top: 1vh;
+    padding-bottom: 55px;
 }
 .source-div{
     display: flex;
