@@ -17,6 +17,7 @@ from app.services.services import (
     get_tips,
     get_videos,
     get_articles,
+    get_students,
 )
 
 routes = Blueprint("routes", __name__)
@@ -158,6 +159,11 @@ def news():
 @routes.route("/about")
 def about():
     return render_template("about.html")
+
+@routes.route("/students")
+def students():
+    students = get_students()
+    return render_template("students.html" ,students = students)
 
 
 @routes.route("/add")

@@ -32,6 +32,12 @@
     --icon2 : hsl(0, 40%, 25%);
     
     --yellow :    hsl(50, 100%, 65%);
+
+    --male: hsl(210, 60%, 30%);
+    --male-bg: hsl(210, 45%, 80%);
+
+    --female: hsl(330, 55%, 35%);
+    --female-bg: hsl(330, 45%, 85%);
 }
 *::-webkit-scrollbar {
     width: 15px;
@@ -948,4 +954,106 @@ input[type="checkbox"] {
     margin-left: 3% !important;
 }
 
+.students-encapsule-div{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto !important;
+    padding-top: 1vh;
+    padding-bottom: 55px;
+    gap: 10px;
+}
+.student-div{
+    height: 70px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(80deg, var(--bg-light-transparent2), var(--bg-light2-transparent2));
+    color: var(--text);
+    direction: rtl;
+    padding: 6px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0px 2px 10px 5px rgba(0, 0, 0, 0.075);
+}
+.person-img{
+    background-color: var(--female-bg);
+    color: var(--female);
+    aspect-ratio: 1/1;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    min-width: 40px;
+}
+.male{
+    background-color: var(--male-bg) !important;
+    color: var(--male) !important;
+}
+.person-img svg{
+    height: 80%;
+    aspect-ratio: 1/1;
+}
+.right-div{
+    display: flex;
+    width: fit-content;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 8px;
+}
+.buttons-div button:active{
+    transform: translateY(3px);
+    background-color: hsl(170, 89%, 41%);
+}
+.buttons-div{
+    height: 100%;
+    width: fit-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    padding-left: 0.5%;
+    flex-direction: column;
+}
+.buttons-div button{
+    height: 48%;
+    width: 100%;
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: var(--text);
+    font-size: 1.1rem;
+    gap: 3px;
+    box-shadow: 0px 2px 10px 2px rgba(0, 0, 0, 0.075);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.buttons-div button:disabled{
+    height: 48%;
+    width: 100%;
+    background-color: hsl(171, 4%, 39%);
+    border-radius: 10px;
+    border: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: hsl(0, 0%, 75%);
+    font-size: 1.1rem;
+    gap: 3px;
+    pointer-events: none;
+    box-shadow: none;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.buttons-div button svg{
+    height: 80%;
+    aspect-ratio: 1/1;
 
+}
