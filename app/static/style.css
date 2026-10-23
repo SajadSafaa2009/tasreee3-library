@@ -338,18 +338,35 @@ main {
     max-width: 200px;
     border-radius: 6px !important;
     overflow: hidden;
-    border-radius: 12px;
-    border: 2px solid hsl(170, 94%, 32%, 0.25);
+    background-color: var(--icon-bg);
+    
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    aspect-ratio: 2 / 3;
 
+}
+.source-img-capsule.image-loaded {
+    background-color: transparent;
 }
 .source-pdf-img {
     width: 100%;
-    height: 100%;
     object-fit: cover;
     display: block;
 }
 
+.fallback-icon {
+    display: none;
+    box-sizing: border-box;
+}
+
+.source-img-capsule:has(.fallback-icon[style*="display: block"]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fallback-icon {
+    flex-shrink: 0;
+}
 .important-icon{
     margin-top: 6px;
     fill: var(--yellow);
