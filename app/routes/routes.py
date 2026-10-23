@@ -227,6 +227,7 @@ def create_video():
     text = request.form.get("text")
     author = request.form.get("author")
     link = request.form.get("link")
+    thumbnail_link = request.form.get("thumbnail_link")
     significance = int(request.form.get("significance", 1))
     description = request.form.get("description")
     general_grade = request.form.get("general_grade") == "on"
@@ -235,7 +236,7 @@ def create_video():
 
     add_video(
         study_type, grade, origin, text, author, link,
-        significance, description,general_grade,general_type
+        significance, description,general_grade,general_type,thumbnail_link
     )
 
     return redirect(url_for("routes.add"))

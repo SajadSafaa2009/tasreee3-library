@@ -66,7 +66,7 @@ def add_source(study_type, grade, origin, text, author, link, significance, desc
     db.session.add(new_source)
     db.session.commit()
 
-def add_video(study_type, grade, origin, text, author, link, significance, description,general_grade,general_type):
+def add_video(study_type, grade, origin, text, author, link, significance, description,general_grade,general_type,thumbnail_link):
     new_video = Source(
         study_type=study_type,
         grade=grade,
@@ -74,6 +74,7 @@ def add_video(study_type, grade, origin, text, author, link, significance, descr
         text=text,
         author=author,
         link=link,
+        thumbnail_link=thumbnail_link,
         significance=significance,
         description=description,
         general_grade=general_grade,
