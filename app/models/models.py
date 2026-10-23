@@ -16,6 +16,7 @@ class Source(db.Model):
     author = db.Column(db.String(2048))
     link = db.Column(db.String(2048), nullable=False)
 
+    thumbnail_link = db.Column(db.String(2048), nullable=True)
     significance = db.Column(db.Float, default=1.0)
     description = db.Column(db.Text)
 
