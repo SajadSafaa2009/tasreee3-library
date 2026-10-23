@@ -50,6 +50,7 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     
     name = db.Column(db.String(255), nullable=False)
+    male = db.Column(db.Boolean, nullable=False,default=False)
     text = db.Column(db.Text, nullable=True)
     year = db.Column(db.Integer, nullable=False)
     

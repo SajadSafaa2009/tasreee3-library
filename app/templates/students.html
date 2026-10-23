@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة تسريع</title>
+    <link rel="icon" type="image/png" href="static/lib_logo4.png">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <main>
+        <button  class="icon-button back-button" onclick="history.back()" >
+            <img src="static/icons/arrow-left.svg" class="icon-img"  alt="">
+        </button>
+        
+        <button  class="icon-button list-button" onclick="ShowSidePanel()" >
+            <img src="static/icons/menu.svg" class="icon-img"  alt="">
+        </button>
+
+        <img src="static/abstract waves.png" class="background-image"  alt="">
+        <!------------------------------------------------------------------------------------------------------------------->
+        {% for student in students %}
+            <div class="student-div">
+                <h3>{{student.name}}</h3>
+                <h3>{{student.year}}</h3>
+            </div>
+        {% endfor %}
+
+
+
+
+
+        <!------------------------------------------------------------------------------------------------------------------->
+        <div id="side-panel">
+            <div style="height: 8%;width: 100%;">
+                <button class="icon-button back-button" onclick="HideSidePanel()">
+                    <img src="static/icons/x.svg" class="icon-img"  alt="">
+                </button>
+            </div>
+            <div class="side-panel-buttons-div">
+                <button class="side-panel-button" onclick="window.location.href='/home'">
+                    <img src="static/icons/house.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">الصفحة الرئيسية</p>
+                </button>
+                <button class="side-panel-button" onclick="window.location.href='/subjects'">
+                    <img src="static/icons/book-text.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">{{ 'التحصيلي' if grade == '0' else 'التحصيلي' }}</p>
+                </button>
+                <button class="side-panel-button" onclick="window.location.href='/iq'">
+                    <img src="static/icons/brain.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">الذكاء</p>
+                </button>
+                <button class="side-panel-button" onclick="window.location.href='/postsubjects'">
+                    <img src="static/icons/book-text.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">{{ 'الثالث متوسط' if grade == '0' else 'السادس علمي' }}</p>
+                </button>
+                <button class="side-panel-button" onclick="window.location.href='/news'">
+                    <img src="static/icons/newspaper.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">الاخبار</p>
+                </button>
+                <button class="side-panel-button" onclick="window.open('https://t.me/tasreee3/1', '_blank')">
+                    <img src="static/icons/messages-circle.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">التواصل مع الطلبة المسرعين</p>
+                </button>
+                <button class="side-panel-button" onclick="window.location.href='/'">
+                    <img src="static/icons/user.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">تغيير نوع الدراسة</p>
+                </button>
+                <button class="side-panel-button" onclick="window.location.href='/about'">
+                    <img src="static/icons/info.svg" class="side-panel-button-img"  alt="">
+                    <p class="side-panel-button-p">عن مكتبة تسريع</p>
+                </button>
+            </div>
+        </div>
+        <div id="blur-screen" class="blur-screen">
+
+        </div>
+    </main>
+</body>
+<script>
+    const side_panel = document.getElementById("side-panel");
+    const blur_screen = document.getElementById("blur-screen");
+    function ShowSidePanel(){
+        side_panel.classList.add("side-panel-unveiled")
+        blur_screen.classList.add("blur-active")
+    }
+    function HideSidePanel(){     
+        side_panel.classList.remove("side-panel-unveiled")
+        blur_screen.classList.remove("blur-active")
+    }
+</script>
+</html>
