@@ -78,18 +78,25 @@
             </div>
             <div class="content-encapsule-div" id="videos-div">
                 {% for video in videos %}
-                    <div class="source-div {% if video.significance > 1 %}show-after{% endif %}" onclick="window.location.href='{{video.link}}'">
-                        <div class="source-img-div">
-                            <div class="video-img-capsule" style="background-color: var(--icon-bg2) !important;">
-                                <svg class="icon-video" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tv-minimal-play preview-icon"><path d="M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z"/><path d="M7 21h10"/><rect width="20" height="14" x="2" y="3" rx="2"/></svg>
+                    <div class="video-div" onclick="window.location.href='{{video.link}}'">
+                        <div class="video-upper-div">
+                            <div class="video-img-capsule">
+                                <img
+                                    src="https://img.youtube.com/vi/{{ video.thumbnail_link.split('youtu.be/')[1].split('?')[0] if 'youtu.be/' in video.thumbnail_link else video.thumbnail_link.split('v=')[1].split('&')[0] if 'v=' in video.thumbnail_link else video.thumbnail_link.split('/shorts/')[1].split('?')[0] }}/hqdefault.jpg"
+                                    alt="PDF preview"
+                                    class="source-pdf-img"
+                                    onload="this.parentElement.classList.add('image-loaded')"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
+                                >
+
+                                <svg class="icon-video fallback-icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tv-minimal-play preview-icon"><path d="M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z"/><path d="M7 21h10"/><rect width="20" height="14" x="2" y="3" rx="2"/></svg>
                             </div>
-                            {% if video.significance > 2 %}
-                                <svg class="important-icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star preview-icon"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
-                            {% endif %}
+                            <div class="video-title-div">
+                                <h1>{{video.text}}</h1>
+                                <h2>{{video.author}}</h2>
+                            </div>
                         </div>
-                        <div class="source-info-div">
-                            <h1>{{video.text}}</h1>
-                            <h2>{{video.author}}</h2>
+                        <div class="video-lower-div">
                             <p>{{video.description}}</p>
                         </div>
                     </div> 
