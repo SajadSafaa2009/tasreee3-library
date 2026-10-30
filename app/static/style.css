@@ -40,13 +40,14 @@
     --female-bg: hsl(330, 45%, 85%);
 }
 *::-webkit-scrollbar {
-    width: 15px;
+    width: 12px;
     height: 10px;
 }
 
 /* Track background */
 *::-webkit-scrollbar-track {
     background:var(--bg-dark);
+    border-radius: 10px;
 }
 
 /* Scrollbar knob */
@@ -347,8 +348,9 @@ main {
 }
 .source-pdf-img {
     width: 100%;
-    object-fit: cover;
+    object-fit: fill;
     display: block;
+    height: auto;
 }
 
 .fallback-icon {
@@ -963,7 +965,7 @@ input[type="checkbox"] {
     max-height: 100%;
     overflow-y: auto !important;
     padding-top: 1vh;
-    padding-bottom: 55px;
+    padding-bottom: 200px;
     gap: 10px;
 }
 .student-div{
