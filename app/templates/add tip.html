@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#20b2aa">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='lib_logo2.png') }}"></link>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مكتبة سرع</title>
     <link rel="icon" type="image/png" href="static/lib_logo2.png">
@@ -126,5 +131,8 @@
     SetGrade(true);
 
 
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/sw.js");
+}
 </script>
 </html>
