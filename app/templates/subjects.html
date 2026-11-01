@@ -13,6 +13,17 @@
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
+    <button id="safe-area-test" style="
+    position: fixed;
+    top: 130px;
+    left: 10px;
+    z-index: 99999;
+    padding: 12px;
+    background: white;
+    color: black;
+">
+    Check bottom inset
+</button>
     <main>
         <button  class="icon-button back-button" onclick="history.back()" >
             <img src="static/icons/arrow-left.svg" class="icon-img"  alt="">
@@ -97,8 +108,24 @@
         side_panel.classList.remove("side-panel-unveiled")
         blur_screen.classList.remove("blur-active")
     }
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/static/sw.js");
-}
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/static/sw.js");
+    }
+    const testButton = document.getElementById("safe-area-test");
+
+    const probe = document.createElement("div");
+    probe.style.cssText = `
+        position: fixed;
+        bottom: 0;
+        padding-bottom: env(safe-area-inset-bottom);
+        visibility: hidden;
+    `;
+
+    document.body.appendChild(probe);
+
+    const inset = getComputedStyle(probe).paddingBottom;
+    testButton.textContent = `Bottom inset: ${inset}`;
+
+    probe.remove();
 </script>
 </html>
