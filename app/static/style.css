@@ -1060,3 +1060,53 @@ input[type="checkbox"] {
     aspect-ratio: 1/1;
 
 }
+:root {
+    --bottom-safe-area: max(env(safe-area-inset-bottom, 0px), 32px) !important;
+}
+
+main {
+    height: 100dvh !important;
+    padding-bottom: var(--bottom-safe-area) !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+.upper-div {
+    height: 20% !important;
+}
+
+.middle-navbar-div {
+    height: 10% !important;
+}
+
+.lower-div {
+    height: 70% !important;
+}
+
+#side-panel {
+    height: auto !important;
+    top: 0 !important;
+    bottom: var(--bottom-safe-area) !important;
+}
+
+.blur-screen {
+    height: 100% !important;
+}
+
+#source-add-form {
+    height: 100% !important;
+}
+
+.content-encapsule-div {
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    padding-bottom: 55px !important;
+}
+
+.buttons-card {
+    bottom: var(--bottom-safe-area) !important;
+}
+
+.lower-shadow {
+    bottom: var(--bottom-safe-area) !important;
+}
