@@ -36,6 +36,14 @@
         <div class="lower-div">
             <div></div>
             <div class="content-encapsule-div" id="sources-div">
+                {% if sources|length == 0 %}
+                    <div class="no-content-div">
+                        <h1>لا توجد مصادر حالياً</h1>
+                        <a href="https://t.me/the_g2ek"><h2>هل يوجد مصدر لم تجده؟</h2></a>
+                        
+                    </div>
+                
+                {% endif %}
                 {% for source in sources %}
                     <div class="source-div" onclick="window.location.href='{{source.link}}'">
                         <div class="source-img-div">
@@ -69,6 +77,12 @@
                 {% endfor%}
             </div>
             <div class="content-encapsule-div" id="tips-div">
+                {% if tips|length == 0 %}
+                    <div class="no-content-div">
+                        <h1>لا توجد نصائح حالياً</h1> 
+                    </div>
+                
+                {% endif %}
                 {% for tip in tips %}
                     <div class="tip-div" disabled-onclick="window.location.href='{{tip.link}}'">
                         <div class="tip-title-div">
@@ -82,6 +96,14 @@
                 {% endfor%}
             </div>
             <div class="content-encapsule-div" id="videos-div">
+                {% if videos|length == 0 %}
+                    <div class="no-content-div">
+                        <h1>لا توجد محاضرات حالياً</h1>
+                        <a href="https://t.me/the_g2ek"><h2>هل توجد محاضرة لم تجدها؟</h2></a>
+                        
+                    </div>
+                
+                {% endif %}
                 {% for video in videos %}
                     <div class="video-div" onclick="window.location.href='{{video.link}}'">
                         <div class="video-upper-div">

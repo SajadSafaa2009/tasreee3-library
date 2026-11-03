@@ -33,6 +33,14 @@
         <div class="lower-div" style="height: 80vh;">
             <div></div>
             <div class="articles-div">
+                {% if articles|length == 0 %}
+                    <div class="no-content-div fade-in second">
+                        <h1>لا توجد اخبار حالياً</h1>
+                        
+                        
+                    </div>
+                
+                {% endif %}
                 {% for article in articles %}
                     <div class="article-div {% if article.important%}important{% endif %} fade-in second">
                         <h1>{{article.title}}</h1>
