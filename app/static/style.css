@@ -152,7 +152,12 @@ main {
     border-radius: 15px;
     box-shadow: 0px 5px 4px 2px rgba(3, 3, 3, 0.137);
     text-decoration: none;
-
+    transition: scale 0.2s ease !important;
+   
+}
+.home-button:active{
+    scale: 0.95 !important;
+    transition: scale 0.2s ease !important;
 }
 
 .form-card{
@@ -314,9 +319,10 @@ main {
     transition: transform 0.3s ease, background-color 0.3s ease;
     box-shadow: 0px 5px 4px 5px rgba(3, 3, 3, 0.149);
 }
-.source-div:active{
-    transform: translateY(5px);
+.source-div:active , .tip-div:active , .video-div:active {
+    transform: translateY(5px) !important;
     background-color: hsl(170, 89%, 41%);
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .source-img-div{
@@ -546,7 +552,7 @@ main {
         var(--bg-light-transparent2),
         var(--bg-light2-transparent2)
     );
-
+    transition: transform 0.3s ease, background-color 0.3s ease;
     box-shadow: 0px 5px 4px 5px rgba(3, 3, 3, 0.149);
     box-sizing: border-box;
 }
@@ -628,6 +634,10 @@ main {
     left: 0;
     rotate: 10deg;
     z-index: -1;
+
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 main{
     position: relative;
