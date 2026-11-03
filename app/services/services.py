@@ -50,7 +50,7 @@ def get_articles():
     return Article.query.order_by(Article.date.desc(), Article.id.asc()).all()
 
 def get_students():
-    return Student.query.order_by(Student.id.asc()).all()
+    return Student.query.order_by(Student.significance.asc()).all()
 
 def add_source(study_type, grade, origin, text, author, link, significance, description,general_grade,general_type):
     new_source = Source(
