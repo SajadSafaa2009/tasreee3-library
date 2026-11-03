@@ -81,7 +81,8 @@ main {
     width: 100%;
     height: 100dvh;
     box-sizing: border-box;
-    padding-bottom: env(safe-area-inset-bottom, 0px) ;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     overflow: hidden;
     background: linear-gradient(to top, var(--bg-dark), var(--bg-accent));
 }
@@ -1059,9 +1060,4 @@ input[type="checkbox"] {
     height: 80%;
     aspect-ratio: 1/1;
 
-}
-@media (display-mode: standalone) {
-    main {
-        height: var(--app-height, 100dvh) !important;
-    }
 }
