@@ -56,4 +56,6 @@ class Student(db.Model):
     
     username = db.Column(db.String(255), nullable=True)
     group_link = db.Column(db.String(2048), nullable=True)
+    
+    significance = db.Column(db.Integer, nullable=False, default=0, server_default="0")
 

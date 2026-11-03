@@ -82,8 +82,7 @@ main {
     height: 100dvh;
     box-sizing: border-box;
     padding-bottom: env(safe-area-inset-bottom, 0px) ;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     background: linear-gradient(to top, var(--bg-dark), var(--bg-accent));
 }
 .title-div{
