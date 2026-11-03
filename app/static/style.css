@@ -903,6 +903,77 @@ input[type="checkbox"] {
     margin-right:3%;
     margin-top: 1.5%;
 }
+.legal-main{
+    display: block;
+    overflow-y: auto;
+}
+.legal-document{
+    position: relative;
+    z-index: 1;
+    width: min(900px, calc(100% - 24px));
+    height: calc(100dvh - 32px);
+    overflow-y: auto;
+    margin: 16px auto;
+    padding: 24px;
+    border: 1px solid var(--bg-light);
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--bg-light-transparent2), var(--bg-light2-transparent2));
+    color: var(--text);
+    direction: rtl;
+    text-align: right;
+    line-height: 1.85;
+}
+.legal-document h1{
+    margin: 0 0 8px;
+    font-size: 2rem;
+}
+.legal-document h2{
+    margin: 24px 0 6px;
+    font-size: 1.25rem;
+}
+.legal-document p,
+.legal-document li{
+    font-size: 1rem;
+}
+.legal-document ul{
+    padding-right: 24px;
+}
+.legal-updated{
+    color: var(--text-muted);
+}
+.legal-links{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+    margin: 16px 0 0px;
+    direction: rtl;
+    text-align: center;
+}
+.legal-links a{
+    color: var(--text-muted);
+    font-size: 0.81rem;
+    opacity: 0.78;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.legal-links a:hover,
+.legal-links a:focus-visible{
+    color: var(--text);
+    opacity: 1;
+}
+.intro-legal-links{
+    position: absolute;
+    z-index: 2;
+    right: 8px;
+    bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+    left: 8px;
+}
+@media (max-width: 480px){
+    .legal-document{
+        padding: 18px;
+    }
+}
 .gradient-text{
     background: linear-gradient(
         90deg,

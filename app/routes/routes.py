@@ -1,4 +1,3 @@
-
 import os
 from functools import wraps
 from flask import (
@@ -29,6 +28,7 @@ def admin_required(view):
         if not session.get("admin_logged_in"):
             return redirect(url_for("routes.login", next=request.path))
         return view(*args, **kwargs)
+
     return wrapped_view
 
 
@@ -39,6 +39,9 @@ def check_cookies():
         "routes.set_cookie",
         "routes.login",
         "routes.logout",
+        "routes.privacy",
+        "routes.cookies",
+        "routes.terms",
     ):
         return
 
@@ -160,10 +163,26 @@ def news():
 def about():
     return render_template("about.html")
 
+
+@routes.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+
+@routes.route("/cookies")
+def cookies():
+    return render_template("cookies.html")
+
+
+@routes.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+
 @routes.route("/students")
 def students():
     students = get_students()
-    return render_template("students.html" ,students = students)
+    return render_template("students.html", students=students)
 
 
 @routes.route("/add")
@@ -195,6 +214,7 @@ def add_video_page():
 def add_article_page():
     return render_template("add article.html")
 
+
 @routes.route("/add_student")
 @admin_required
 def add_student_page():
@@ -217,8 +237,16 @@ def create_source():
     from app.services.services import add_source
 
     add_source(
-        study_type, grade, origin, text, author, link,
-        significance, description,general_grade,general_type
+        study_type,
+        grade,
+        origin,
+        text,
+        author,
+        link,
+        significance,
+        description,
+        general_grade,
+        general_type,
     )
 
     return redirect(url_for("routes.add"))
@@ -241,8 +269,17 @@ def create_video():
     from app.services.services import add_video
 
     add_video(
-        study_type, grade, origin, text, author, link,
-        significance, description,general_grade,general_type,thumbnail_link
+        study_type,
+        grade,
+        origin,
+        text,
+        author,
+        link,
+        significance,
+        description,
+        general_grade,
+        general_type,
+        thumbnail_link,
     )
 
     return redirect(url_for("routes.add"))
@@ -261,7 +298,15 @@ def create_tip():
     general_grade = request.form.get("general_grade") == "on"
     general_type = request.form.get("general_type") == "on"
     add_tip(
-        study_type, grade, origin, title, author, significance, text,general_grade,general_type
+        study_type,
+        grade,
+        origin,
+        title,
+        author,
+        significance,
+        text,
+        general_grade,
+        general_type,
     )
 
     return redirect(url_for("routes.add"))
@@ -281,6 +326,7 @@ def create_article():
 
     return redirect(url_for("routes.add"))
 
+
 @routes.route("/student/create", methods=["POST"])
 @admin_required
 def create_student():
@@ -289,11 +335,10 @@ def create_student():
     year = request.form.get("year")
     username = request.form.get("username")
     group_link = request.form.get("group_link")
-    
 
     from app.services.services import add_student
 
-    add_student(name, text, year, username,group_link)
+    add_student(name, text, year, username, group_link)
 
     return redirect(url_for("routes.add"))
 
@@ -305,8 +350,6 @@ def set_cookie():
 
     response = make_response(redirect(url_for("routes.home")))
     response.set_cookie("grade-cookie", grade, max_age=60 * 60 * 24 * 30)
-    response.set_cookie(
-        "study-type-cookie", study_type, max_age=60 * 60 * 24 * 30
-    )
+    response.set_cookie("study-type-cookie", study_type, max_age=60 * 60 * 24 * 30)
 
     return response

@@ -35,6 +35,11 @@
             <p>تم تطوير هذا التطبيق والموقع الإلكتروني وبرمجتهما من قبل <strong class="gradient-text">المُسرّع سجاد صفاء سعدون</strong>، انطلاقًا من الإيمان بأهمية توظيف التكنولوجيا في خدمة الطلبة وتوفير أدوات تعليمية تسهّل عليهم الوصول إلى المعرفة.</p>
 
             <p><strong>مكتبة سرع — مصادرُك الدراسية، في مكان واحد.</strong></p>
+            <nav class="legal-links" aria-label="الوثائق القانونية">
+                <a href="{{ url_for('routes.privacy') }}">سياسة الخصوصية</a>
+                <a href="{{ url_for('routes.cookies') }}">سياسة ملفات تعريف الارتباط</a>
+                <a href="{{ url_for('routes.terms') }}">شروط الاستخدام</a>
+            </nav>
         </div>
         <div class="buttons-card">
             <button class="home-button about-button fade-in third" onclick="window.open('https://t.me/the_g2ek', '_blank')">
