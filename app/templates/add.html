@@ -28,5 +28,17 @@
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/static/sw.js");
 }
+window.addEventListener("load", refreshAppHeight);
+    window.addEventListener("pageshow", refreshAppHeight);
+    window.addEventListener("resize", refreshAppHeight);
+    window.addEventListener("orientationchange", () => {
+        setTimeout(refreshAppHeight, 100);
+    });
+
+    window.visualViewport?.addEventListener("resize", refreshAppHeight);
+
+    setTimeout(refreshAppHeight, 10);
+    setTimeout(refreshAppHeight, 100);
+    setTimeout(refreshAppHeight, 300);
 </script>
 </html>
