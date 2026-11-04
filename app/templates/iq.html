@@ -56,7 +56,7 @@
                                     <img
                                         src="https://drive.google.com/thumbnail?id={{ source.link.split('/d/')[1].split('/')[0] }}&sz=w500"
                                         alt="PDF preview"
-                                        class="source-pdf-img"
+                                        class="source-pdf-img height-100"
                                         onload="this.parentElement.classList.add('image-loaded')"
                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
                                     >
@@ -120,7 +120,7 @@
                                 <img
                                     src="https://img.youtube.com/vi/{{ video.thumbnail_link.split('youtu.be/')[1].split('?')[0] if 'youtu.be/' in video.thumbnail_link else video.thumbnail_link.split('v=')[1].split('&')[0] if 'v=' in video.thumbnail_link else video.thumbnail_link.split('/shorts/')[1].split('?')[0] }}/hqdefault.jpg"
                                     alt="PDF preview"
-                                    class="source-pdf-img"
+                                    class="source-pdf-img "
                                     onload="this.parentElement.classList.add('image-loaded')"
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
                                 >
