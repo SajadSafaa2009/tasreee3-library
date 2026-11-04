@@ -25,14 +25,14 @@
         <img src="static/abstract waves.png" class="background-image"  alt="">
         <!------------------------------------------------------------------------------------------------------------------->
             <div class="upper-div">
-                <div class="subject-title-div  shorter-title" >
-                    <h1>الطلبة المسرعين</h1>
+                <div class="subject-title-div  shorter-title fade-in first" >
+                    <h1 f>الطلبة المسرعين</h1>
                     
                 </div>
             </div>
             <div class="students-encapsule-div">
                 {% for student in students %}
-                    <div class="student-div ">
+                    <div class="student-div fade-in second">
                         <div class="right-div">
                             <div class="person-img {% if student.male%} male {% endif %}">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user preview-icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
