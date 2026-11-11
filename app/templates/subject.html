@@ -68,7 +68,7 @@
 </head>
 
 <body>
-    <main>
+    <main class="library-page">
 
         <button class="icon-button back-button" onclick="history.back()">
             <img src="static/icons/arrow-left.svg" class="icon-img" alt="">
@@ -460,7 +460,6 @@
 
 
         async function shareItem(event, type, itemId, title) {
-
             event.stopPropagation();
 
             const url = new URL(window.location.href);
@@ -470,7 +469,9 @@
                     .split("; ")
                     .find(row => row.startsWith(`${name}=`));
 
-                return cookie ? decodeURIComponent(cookie.split("=").slice(1).join("=")) : null;
+                return cookie
+                    ? decodeURIComponent(cookie.split("=").slice(1).join("="))
+                    : null;
             };
 
             const grade = getCookie("grade-cookie");
@@ -484,34 +485,42 @@
                 url.searchParams.set("share_study_type", studyType);
             }
 
+            const itemTitle = (title || "محتوى").trim();
+            const link = url.toString();
+
+            const shareText =
+                `مكتبة سرع\n\n` +
+                `عنوان المحتوى:\n${itemTitle}\n\n` +
+                `رابط المحتوى:\n${link}`;
+
             const shareData = {
-                title: title,
-                text: `شاهد هذا ${type === "sources" ? "المصدر" : "المحاضرة"} من مكتبة سرع`,
-                url: url.toString()
+                title: itemTitle,
+                text: `مشاركة من مكتبة سرع\n\n${itemTitle}`,
+                url: link
             };
 
             try {
-
                 if (navigator.share) {
-
                     await navigator.share(shareData);
-
+                } else if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(shareText);
+                    alert("تم نسخ رسالة المشاركة بنجاح");
                 } else {
-
-                    await navigator.clipboard.writeText(url.toString());
-
-                    alert("تم نسخ رابط المشاركة بنجاح");
-
+                    const temporaryInput = document.createElement("textarea");
+                    temporaryInput.value = shareText;
+                    temporaryInput.style.position = "fixed";
+                    temporaryInput.style.opacity = "0";
+                    document.body.appendChild(temporaryInput);
+                    temporaryInput.select();
+                    document.execCommand("copy");
+                    temporaryInput.remove();
+                    alert("تم نسخ رسالة المشاركة بنجاح");
                 }
-
             } catch (error) {
-
                 if (error.name !== "AbortError") {
                     console.error("Sharing failed:", error);
                 }
-
             }
-
         }
 
 
