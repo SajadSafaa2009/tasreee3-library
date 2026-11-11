@@ -1,0 +1,386 @@
+import os
+from functools import wraps
+from urllib.parse import urlencode
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    request,
+    make_response,
+    session,
+)
+from werkzeug.security import check_password_hash
+from app.services.services import (
+    add_tip,
+    get_sources,
+    get_tips,
+    get_videos,
+    get_articles,
+    get_students,
+)
+
+routes = Blueprint("routes", __name__)
+
+
+def admin_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("routes.login", next=request.path))
+        return view(*args, **kwargs)
+
+    return wrapped_view
+
+
+@routes.before_request
+def check_cookies():
+    shared_grade = request.args.get("share_grade")
+    shared_study_type = request.args.get("share_study_type")
+
+    if shared_grade in ("0", "1") and shared_study_type in ("0", "1"):
+        remaining_args = request.args.to_dict(flat=True)
+        remaining_args.pop("share_grade", None)
+        remaining_args.pop("share_study_type", None)
+
+        query_string = urlencode(remaining_args)
+        target = request.path
+        if query_string:
+            target = f"{target}?{query_string}"
+
+        response = make_response(redirect(target))
+        response.set_cookie(
+            "grade-cookie",
+            shared_grade,
+            max_age=60 * 60 * 24 * 30,
+            samesite="Lax",
+            secure=request.is_secure,
+        )
+        response.set_cookie(
+            "study-type-cookie",
+            shared_study_type,
+            max_age=60 * 60 * 24 * 30,
+            samesite="Lax",
+            secure=request.is_secure,
+        )
+        return response
+
+    if request.endpoint in (
+        "routes.grade",
+        "routes.set_cookie",
+        "routes.login",
+        "routes.logout",
+        "routes.privacy",
+        "routes.cookies",
+        "routes.terms",
+    ):
+        return
+
+    if request.cookies.get("grade-cookie") not in ("0", "1") or request.cookies.get(
+        "study-type-cookie"
+    ) not in ("0", "1"):
+        return redirect(url_for("routes.grade"))
+
+
+@routes.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        expected_username = os.environ.get("ADMIN_USERNAME", "")
+        password_hash = os.environ.get("ADMIN_PASSWORD_HASH", "")
+
+        if (
+            expected_username
+            and password_hash
+            and username == expected_username
+            and check_password_hash(password_hash, password)
+        ):
+            session.clear()
+            session["admin_logged_in"] = True
+
+            next_url = request.args.get("next", "")
+            if next_url.startswith("/") and not next_url.startswith("//"):
+                return redirect(next_url)
+
+            return redirect(url_for("routes.add"))
+
+        error = "Invalid username or password."
+
+    return render_template("login.html", error=error)
+
+
+@routes.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return redirect(url_for("routes.login"))
+
+
+@routes.route("/")
+def grade():
+    return render_template("grade.html")
+
+
+@routes.route("/home")
+def home():
+    grade = request.cookies.get("grade-cookie")
+    return render_template("index.html", grade=grade)
+
+
+@routes.route("/iq")
+def iq():
+    grade = request.cookies.get("grade-cookie") == "1"
+    study_type = request.cookies.get("study-type-cookie") == "1"
+    sources = get_sources(origin="iq", grade=grade, study_type=study_type)
+    tips = get_tips(origin="iq", grade=grade, study_type=study_type)
+    videos = get_videos(origin="iq", grade=grade, study_type=study_type)
+    return render_template("iq.html", sources=sources, tips=tips, videos=videos)
+
+
+@routes.route("/subjects")
+def subjects():
+    grade = request.cookies.get("grade-cookie")
+    return render_template("subjects.html", grade=grade)
+
+
+@routes.route("/subject")
+def subject():
+    origin = request.args.get("origin")
+    grade = request.cookies.get("grade-cookie") == "1"
+    study_type = request.cookies.get("study-type-cookie") == "1"
+    sources = get_sources(origin=origin, grade=grade, study_type=study_type)
+    tips = get_tips(origin=origin, grade=grade, study_type=study_type)
+    videos = get_videos(origin=origin, grade=grade, study_type=study_type)
+
+    origins = {
+        "math": "الرياضيات",
+        "biology": "الاحياء",
+        "chemistry": "الكيمياء",
+        "physics": "الفيزياء",
+        "english": "اللغة الانكليزية",
+        "arabic": "اللغة العربية",
+        "french": "اللغة الفرنسية",
+        "religion": "التربية الاسلامية",
+        "math2": "الرياضيات",
+        "physics2": "الفيزياء",
+        "chemistry2": "الكيمياء",
+        "biology2": "الاحياء",
+    }
+
+    return render_template(
+        "subject.html",
+        sources=sources,
+        tips=tips,
+        videos=videos,
+        origin_arabic=origins.get(origin, ""),
+    )
+
+
+@routes.route("/postsubjects")
+def postsubjects():
+    grade = request.cookies.get("grade-cookie")
+    return render_template("subjects2.html", grade=grade)
+
+
+@routes.route("/news")
+def news():
+    articles = get_articles()
+    return render_template("news.html", articles=articles)
+
+
+@routes.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@routes.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+
+@routes.route("/cookies")
+def cookies():
+    return render_template("cookies.html")
+
+
+@routes.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+
+@routes.route("/students")
+def students():
+    students = get_students()
+    return render_template("students.html", students=students)
+
+
+@routes.route("/add")
+@admin_required
+def add():
+    return render_template("add.html")
+
+
+@routes.route("/add_source")
+@admin_required
+def add_source_page():
+    return render_template("add source.html")
+
+
+@routes.route("/add_advice")
+@admin_required
+def add_advice():
+    return render_template("add tip.html")
+
+
+@routes.route("/add_video")
+@admin_required
+def add_video_page():
+    return render_template("add video.html")
+
+
+@routes.route("/add_article")
+@admin_required
+def add_article_page():
+    return render_template("add article.html")
+
+
+@routes.route("/add_student")
+@admin_required
+def add_student_page():
+    return render_template("add student.html")
+
+
+@routes.route("/source/create", methods=["POST"])
+@admin_required
+def create_source():
+    study_type = request.form.get("study_type") == "true"
+    grade = request.form.get("grade") == "true"
+    origin = request.form.get("origin")
+    text = request.form.get("text")
+    author = request.form.get("author")
+    link = request.form.get("link")
+    significance = int(request.form.get("significance", 1))
+    description = request.form.get("description")
+    general_grade = request.form.get("general_grade") == "on"
+    general_type = request.form.get("general_type") == "on"
+    from app.services.services import add_source
+
+    add_source(
+        study_type,
+        grade,
+        origin,
+        text,
+        author,
+        link,
+        significance,
+        description,
+        general_grade,
+        general_type,
+    )
+
+    return redirect(url_for("routes.add"))
+
+
+@routes.route("/video/create", methods=["POST"])
+@admin_required
+def create_video():
+    study_type = request.form.get("study_type") == "true"
+    grade = request.form.get("grade") == "true"
+    origin = request.form.get("origin")
+    text = request.form.get("text")
+    author = request.form.get("author")
+    link = request.form.get("link")
+    thumbnail_link = request.form.get("thumbnail_link")
+    significance = int(request.form.get("significance", 1))
+    description = request.form.get("description")
+    general_grade = request.form.get("general_grade") == "on"
+    general_type = request.form.get("general_type") == "on"
+    from app.services.services import add_video
+
+    add_video(
+        study_type,
+        grade,
+        origin,
+        text,
+        author,
+        link,
+        significance,
+        description,
+        general_grade,
+        general_type,
+        thumbnail_link,
+    )
+
+    return redirect(url_for("routes.add"))
+
+
+@routes.route("/tip/create", methods=["POST"])
+@admin_required
+def create_tip():
+    study_type = request.form.get("study_type") == "true"
+    grade = request.form.get("grade") == "true"
+    origin = request.form.get("origin")
+    text = request.form.get("text")
+    author = request.form.get("author")
+    significance = int(request.form.get("significance", 1))
+    title = request.form.get("title")
+    general_grade = request.form.get("general_grade") == "on"
+    general_type = request.form.get("general_type") == "on"
+    add_tip(
+        study_type,
+        grade,
+        origin,
+        title,
+        author,
+        significance,
+        text,
+        general_grade,
+        general_type,
+    )
+
+    return redirect(url_for("routes.add"))
+
+
+@routes.route("/article/create", methods=["POST"])
+@admin_required
+def create_article():
+    text = request.form.get("text")
+    title = request.form.get("title")
+    date = request.form.get("date")
+    important = request.form.get("important") == "on"
+
+    from app.services.services import add_article
+
+    add_article(title, text, date, important)
+
+    return redirect(url_for("routes.add"))
+
+
+@routes.route("/student/create", methods=["POST"])
+@admin_required
+def create_student():
+    name = request.form.get("name")
+    text = request.form.get("text")
+    year = request.form.get("year")
+    username = request.form.get("username")
+    group_link = request.form.get("group_link")
+
+    from app.services.services import add_student
+
+    add_student(name, text, year, username, group_link)
+
+    return redirect(url_for("routes.add"))
+
+
+@routes.route("/set-cookie", methods=["GET"])
+def set_cookie():
+    grade = request.args.get("grade")
+    study_type = request.args.get("study_type")
+
+    response = make_response(redirect(url_for("routes.home")))
+    response.set_cookie("grade-cookie", grade, max_age=60 * 60 * 24 * 30)
+    response.set_cookie("study-type-cookie", study_type, max_age=60 * 60 * 24 * 30)
+
+    return response

@@ -465,8 +465,24 @@
 
             const url = new URL(window.location.href);
 
+            const getCookie = name => {
+                const cookie = document.cookie
+                    .split("; ")
+                    .find(row => row.startsWith(`${name}=`));
+
+                return cookie ? decodeURIComponent(cookie.split("=").slice(1).join("=")) : null;
+            };
+
+            const grade = getCookie("grade-cookie");
+            const studyType = getCookie("study-type-cookie");
+
             url.searchParams.set("tab", type);
             url.searchParams.set("item", itemId);
+
+            if (["0", "1"].includes(grade) && ["0", "1"].includes(studyType)) {
+                url.searchParams.set("share_grade", grade);
+                url.searchParams.set("share_study_type", studyType);
+            }
 
             const shareData = {
                 title: title,

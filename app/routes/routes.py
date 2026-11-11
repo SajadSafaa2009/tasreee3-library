@@ -1,5 +1,6 @@
 import os
 from functools import wraps
+from urllib.parse import urlencode
 from flask import (
     Blueprint,
     render_template,
@@ -34,6 +35,36 @@ def admin_required(view):
 
 @routes.before_request
 def check_cookies():
+    shared_grade = request.args.get("share_grade")
+    shared_study_type = request.args.get("share_study_type")
+
+    if shared_grade in ("0", "1") and shared_study_type in ("0", "1"):
+        remaining_args = request.args.to_dict(flat=True)
+        remaining_args.pop("share_grade", None)
+        remaining_args.pop("share_study_type", None)
+
+        query_string = urlencode(remaining_args)
+        target = request.path
+        if query_string:
+            target = f"{target}?{query_string}"
+
+        response = make_response(redirect(target))
+        response.set_cookie(
+            "grade-cookie",
+            shared_grade,
+            max_age=60 * 60 * 24 * 30,
+            samesite="Lax",
+            secure=request.is_secure,
+        )
+        response.set_cookie(
+            "study-type-cookie",
+            shared_study_type,
+            max_age=60 * 60 * 24 * 30,
+            samesite="Lax",
+            secure=request.is_secure,
+        )
+        return response
+
     if request.endpoint in (
         "routes.grade",
         "routes.set_cookie",
@@ -45,9 +76,9 @@ def check_cookies():
     ):
         return
 
-    if not request.cookies.get("grade-cookie") or not request.cookies.get(
+    if request.cookies.get("grade-cookie") not in ("0", "1") or request.cookies.get(
         "study-type-cookie"
-    ):
+    ) not in ("0", "1"):
         return redirect(url_for("routes.grade"))
 
 

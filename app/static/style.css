@@ -283,9 +283,9 @@ main {
 }
 .lower-div{
     display: flex;
+    position: relative;
     height: 70vh;
     width: 100%;
-
 }
 .content-encapsule-div{
     display: flex;
@@ -619,10 +619,12 @@ main {
 }
 .lower-shadow{
     position: absolute;
-    bottom: -1%;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
     width: 100%;
     height: 10vh;
-    background: linear-gradient(to top, var(--bg-dark) , transparent);
+    background: linear-gradient(to top, var(--bg-dark), transparent);
     pointer-events: none;
 }
 .post-title{
