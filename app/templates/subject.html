@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,48 +7,117 @@
     <meta name="theme-color" content="#23393e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='lib_logo2.png') }}"></link>
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='lib_logo2.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>مكتبة سرع</title>
     <link rel="icon" type="image/png" href="static/lib_logo2.png">
     <link rel="stylesheet" href="static/style.css">
+
+    <style>
+        .share-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 9px 15px;
+            border: none;
+            border-radius: 10px;
+            background: #23393e;
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .share-button:hover {
+            background: #31545b;
+            transform: translateY(-2px);
+        }
+
+        .share-button:active {
+            transform: scale(0.96);
+        }
+
+        .share-button svg {
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+        }
+
+        .shared-item-highlight {
+            position: relative;
+            z-index: 2;
+            outline: 3px solid #25a88a !important;
+            outline-offset: 4px;
+            animation: sharedHighlight 1s ease-in-out 3;
+            scroll-margin: 30px;
+        }
+
+        @keyframes sharedHighlight {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(37, 168, 138, 0);
+            }
+
+            50% {
+                box-shadow: 0 0 18px 5px rgba(37, 168, 138, 0.4);
+            }
+        }
+    </style>
 </head>
+
 <body>
     <main>
-        <button  class="icon-button back-button" onclick="history.back()" >
-            <img src="static/icons/arrow-left.svg" class="icon-img"  alt="">
-        </button>
-        
-        <button  class="icon-button list-button" onclick="ShowSidePanel()" >
-            <img src="static/icons/menu.svg" class="icon-img"  alt="">
+
+        <button class="icon-button back-button" onclick="history.back()">
+            <img src="static/icons/arrow-left.svg" class="icon-img" alt="">
         </button>
 
-        <img src="static/abstract waves.png" class="background-image"  alt="">
+        <button class="icon-button list-button" onclick="ShowSidePanel()">
+            <img src="static/icons/menu.svg" class="icon-img" alt="">
+        </button>
+
+        <img src="static/abstract waves.png" class="background-image" alt="">
+
         <div class="upper-div">
-            <div class="subject-title-div  shorter-title">
-                <h1 >{{origin_arabic}}</h1>
+            <div class="subject-title-div shorter-title">
+                <h1>{{ origin_arabic }}</h1>
             </div>
         </div>
+
         <div class="middle-navbar-div">
             <button onclick="SetInfoType('sources')" id="sources-select-button">المصادر</button>
             <button onclick="SetInfoType('tips')" id="tips-select-button">النصائح</button>
             <button onclick="SetInfoType('videos')" id="videos-select-button">المحاضرات</button>
         </div>
+
         <div class="lower-div">
+
             <div></div>
+
             <div class="content-encapsule-div" id="sources-div">
+
                 {% if sources|length == 0 %}
                     <div class="no-content-div">
                         <h1>لا توجد مصادر حالياً</h1>
-                        <a href="https://t.me/the_g2ek"><h2>هل يوجد مصدر لم تجده؟</h2></a>
-                        
+                        <a href="https://t.me/the_g2ek">
+                            <h2>هل يوجد مصدر لم تجده؟</h2>
+                        </a>
                     </div>
-                
                 {% endif %}
+
                 {% for source in sources %}
-                    <div class="source-div" onclick="window.location.href='{{source.link}}'">
+
+                    <div class="source-div"
+                         data-share-type="sources"
+                         data-share-id="{{ source.id }}"
+                         onclick="window.location.href='{{ source.link }}'">
+
                         <div class="source-img-div">
+
                             <div class="source-img-capsule">
+
                                 <img
                                     src="https://drive.google.com/thumbnail?id={{ source.link.split('/d/')[1].split('/')[0] }}&sz=w500"
                                     alt="PDF preview"
@@ -56,186 +126,447 @@
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
                                 >
 
-                                <svg class="icon-book fallback-icon" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg class="icon-book fallback-icon"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
                                     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/>
                                     <path d="M8 11h8"/>
                                     <path d="M8 7h6"/>
+
                                 </svg>
+
                             </div>
+
                             {% if source.significance > 2 %}
-                                <svg class="important-icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star preview-icon"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+                                <svg class="important-icon"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>
+
+                                </svg>
                             {% endif %}
+
                         </div>
+
                         <div class="source-info-div">
-                            <h1>{{source.text}}</h1>
-                            <h2>{{source.author}}</h2>
-                            <p>{{source.description}}</p>
+                            <h1>{{ source.text }}</h1>
+                            <h2>{{ source.author }}</h2>
+                            <p>{{ source.description }}</p>
+
+                            <button type="button"
+                                    class="share-button"
+                                    data-share-button
+                                    data-share-type="sources"
+                                    data-share-id="{{ source.id }}"
+                                    data-share-title="{{ source.text|e }}">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <circle cx="18" cy="5" r="3"/>
+                                    <circle cx="6" cy="12" r="3"/>
+                                    <circle cx="18" cy="19" r="3"/>
+                                    <path d="m8.7 10.7 6.6-4.4"/>
+                                    <path d="m8.7 13.3 6.6 4.4"/>
+
+                                </svg>
+
+                            </button>
                         </div>
+
                     </div>
-                {% endfor%}
+
+                {% endfor %}
+
             </div>
+
+
             <div class="content-encapsule-div" id="tips-div">
+
                 {% if tips|length == 0 %}
                     <div class="no-content-div">
-                        <h1>لا توجد نصائح حالياً</h1> 
+                        <h1>لا توجد نصائح حالياً</h1>
                     </div>
-                
                 {% endif %}
+
                 {% for tip in tips %}
-                    <div class="tip-div" disabled-onclick="window.location.href='{{tip.link}}'">
+
+                    <div class="tip-div" disabled-onclick="window.location.href='{{ tip.link }}'">
+
                         <div class="tip-title-div">
-                            <h2 style="font-size: clamp(8px, 1vw + 1.5vh, 40px);">{{tip.title}}</h2>
-                            <h2>{{tip.author}}</h2>
+                            <h2 style="font-size: clamp(8px, 1vw + 1.5vh, 40px);">
+                                {{ tip.title }}
+                            </h2>
+                            <h2>{{ tip.author }}</h2>
                         </div>
+
                         <div class="tip-text-div">
-                            <p>{{tip.text}}</p>
+                            <p>{{ tip.text }}</p>
                         </div>
+
                     </div>
-                {% endfor%}
+
+                {% endfor %}
+
             </div>
+
+
             <div class="content-encapsule-div" id="videos-div">
+
                 {% if videos|length == 0 %}
                     <div class="no-content-div">
                         <h1>لا توجد محاضرات حالياً</h1>
-                        <a href="https://t.me/the_g2ek"><h2>هل توجد محاضرة لم تجدها؟</h2></a>
-                        
+                        <a href="https://t.me/the_g2ek">
+                            <h2>هل توجد محاضرة لم تجدها؟</h2>
+                        </a>
                     </div>
-                
                 {% endif %}
+
                 {% for video in videos %}
-                    <div class="video-div" onclick="window.location.href='{{video.link}}'">
+
+                    <div class="video-div"
+                         data-share-type="videos"
+                         data-share-id="{{ video.id }}"
+                         onclick="window.location.href='{{ video.link }}'">
+
                         <div class="video-upper-div">
+
                             <div class="video-img-capsule">
+
                                 <img
                                     src="https://img.youtube.com/vi/{{ video.thumbnail_link.split('youtu.be/')[1].split('?')[0] if 'youtu.be/' in video.thumbnail_link else video.thumbnail_link.split('v=')[1].split('&')[0] if 'v=' in video.thumbnail_link else video.thumbnail_link.split('/shorts/')[1].split('?')[0] }}/hqdefault.jpg"
-                                    alt="PDF preview"
+                                    alt="Video preview"
                                     class="source-pdf-img"
                                     onload="this.parentElement.classList.add('image-loaded')"
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
                                 >
 
-                                <svg class="icon-video fallback-icon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tv-minimal-play preview-icon"><path d="M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z"/><path d="M7 21h10"/><rect width="20" height="14" x="2" y="3" rx="2"/></svg>
+                                <svg class="icon-video fallback-icon"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <path d="M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56z"/>
+                                    <path d="M7 21h10"/>
+                                    <rect width="20" height="14" x="2" y="3" rx="2"/>
+
+                                </svg>
+
                             </div>
+
                             <div class="video-title-div">
-                                <h1>{{video.text}}</h1>
-                                <h2>{{video.author}}</h2>
+                                <h1>{{ video.text }}</h1>
+                                <h2>{{ video.author }}</h2>
                             </div>
+
                         </div>
+
                         <div class="video-lower-div">
-                            <p>{{video.description}}</p>
+
+                            <p>{{ video.description }}</p>
+
+                            <button type="button"
+                                    class="share-button"
+                                    data-share-button
+                                    data-share-type="videos"
+                                    data-share-id="{{ video.id }}"
+                                    data-share-title="{{ video.text|e }}">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <circle cx="18" cy="5" r="3"/>
+                                    <circle cx="6" cy="12" r="3"/>
+                                    <circle cx="18" cy="19" r="3"/>
+                                    <path d="m8.7 10.7 6.6-4.4"/>
+                                    <path d="m8.7 13.3 6.6 4.4"/>
+
+                                </svg>
+
+                            </button>
+
                         </div>
-                    </div> 
-                {% endfor%}
+
+                    </div>
+
+                {% endfor %}
+
             </div>
+
             <div class="lower-shadow"></div>
+
         </div>
+
+
         <div id="side-panel">
+
             <div style="height: 8%;width: 100%;">
+
                 <button class="icon-button back-button" onclick="HideSidePanel()">
-                    <img src="static/icons/x.svg" class="icon-img"  alt="">
+                    <img src="static/icons/x.svg" class="icon-img" alt="">
                 </button>
+
             </div>
+
             <div class="side-panel-buttons-div">
+
                 <button class="side-panel-button" onclick="window.location.href='/home'">
-                    <img src="static/icons/house.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/house.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">الصفحة الرئيسية</p>
                 </button>
+
                 <button class="side-panel-button" onclick="window.location.href='/subjects'">
-                    <img src="static/icons/book-text.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/book-text.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">{{ 'التحصيلي' if grade == '0' else 'التحصيلي' }}</p>
                 </button>
+
                 <button class="side-panel-button" onclick="window.location.href='/iq'">
-                    <img src="static/icons/brain.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/brain.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">الذكاء</p>
                 </button>
+
                 <button class="side-panel-button" onclick="window.location.href='/postsubjects'">
-                    <img src="static/icons/book-text.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/book-text.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">{{ 'الثالث متوسط' if grade == '0' else 'السادس علمي' }}</p>
                 </button>
+
                 <button class="side-panel-button" onclick="window.location.href='/news'">
-                    <img src="static/icons/newspaper.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/newspaper.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">الاخبار</p>
                 </button>
+
                 <button class="side-panel-button" onclick="window.location.href='/students'">
-                    <img src="static/icons/messages-circle.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/messages-circle.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">التواصل مع الطلبة المسرعين</p>
                 </button>
+
                 <button class="side-panel-button" onclick="window.location.href='/'">
-                    <img src="static/icons/user.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/user.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">تغيير نوع الدراسة</p>
                 </button>
+
                 <button class="side-panel-button" onclick="window.location.href='/about'">
-                    <img src="static/icons/info.svg" class="side-panel-button-img"  alt="">
+                    <img src="static/icons/info.svg" class="side-panel-button-img" alt="">
                     <p class="side-panel-button-p">عن مكتبة سرع</p>
                 </button>
+
             </div>
-        </div>
-        <div id="blur-screen" class="blur-screen" onclick="HideSidePanel()">
 
         </div>
+
+        <div id="blur-screen" class="blur-screen" onclick="HideSidePanel()"></div>
+
     </main>
-</body>
-<script>
-    let info_type = "sources";
-    const side_panel = document.getElementById("side-panel");
-    const blur_screen = document.getElementById("blur-screen");
-    function ShowSidePanel(){
-        side_panel.classList.add("side-panel-unveiled")
-        blur_screen.classList.add("blur-active")
-    }
-    function HideSidePanel(){     
-        side_panel.classList.remove("side-panel-unveiled")
-        blur_screen.classList.remove("blur-active")
-    }
 
-    function RenderContent() {
-        const tabs = [
-            document.getElementById("sources-div"),
-            document.getElementById("tips-div"),
-            document.getElementById("videos-div")
-        ];
+    <script>
 
-        tabs.forEach(tab => {
-            tab.classList.remove("tab-enter");
-            tab.style.display = "none";
+        let info_type = "sources";
+
+        const side_panel = document.getElementById("side-panel");
+        const blur_screen = document.getElementById("blur-screen");
+
+
+        function ShowSidePanel() {
+            side_panel.classList.add("side-panel-unveiled");
+            blur_screen.classList.add("blur-active");
+        }
+
+
+        function HideSidePanel() {
+            side_panel.classList.remove("side-panel-unveiled");
+            blur_screen.classList.remove("blur-active");
+        }
+
+
+        function RenderContent() {
+
+            const tabs = [
+                document.getElementById("sources-div"),
+                document.getElementById("tips-div"),
+                document.getElementById("videos-div")
+            ];
+
+            tabs.forEach(tab => {
+                tab.classList.remove("tab-enter");
+                tab.style.display = "none";
+            });
+
+            const activeTab = document.getElementById(`${info_type}-div`);
+
+            activeTab.style.display = "flex";
+
+            void activeTab.offsetWidth;
+
+            activeTab.classList.add("tab-enter");
+        }
+
+
+        function SetInfoType(type) {
+
+            info_type = type;
+
+            const sources_div = document.getElementById("sources-select-button");
+            const tips_div = document.getElementById("tips-select-button");
+            const videos_div = document.getElementById("videos-select-button");
+
+            if (info_type === "sources") {
+
+                sources_div.classList.add("selected-info-type");
+                tips_div.classList.remove("selected-info-type");
+                videos_div.classList.remove("selected-info-type");
+
+            } else if (info_type === "tips") {
+
+                sources_div.classList.remove("selected-info-type");
+                tips_div.classList.add("selected-info-type");
+                videos_div.classList.remove("selected-info-type");
+
+            } else if (info_type === "videos") {
+
+                sources_div.classList.remove("selected-info-type");
+                tips_div.classList.remove("selected-info-type");
+                videos_div.classList.add("selected-info-type");
+
+            }
+
+            RenderContent();
+        }
+
+
+        async function shareItem(event, type, itemId, title) {
+
+            event.stopPropagation();
+
+            const url = new URL(window.location.href);
+
+            url.searchParams.set("tab", type);
+            url.searchParams.set("item", itemId);
+
+            const shareData = {
+                title: title,
+                text: `شاهد هذا ${type === "sources" ? "المصدر" : "المحاضرة"} من مكتبة سرع`,
+                url: url.toString()
+            };
+
+            try {
+
+                if (navigator.share) {
+
+                    await navigator.share(shareData);
+
+                } else {
+
+                    await navigator.clipboard.writeText(url.toString());
+
+                    alert("تم نسخ رابط المشاركة بنجاح");
+
+                }
+
+            } catch (error) {
+
+                if (error.name !== "AbortError") {
+                    console.error("Sharing failed:", error);
+                }
+
+            }
+
+        }
+
+
+        function openSharedItem() {
+
+            const params = new URLSearchParams(window.location.search);
+
+            const type = params.get("tab");
+            const itemId = params.get("item");
+
+            if (!["sources", "videos"].includes(type) || !itemId) {
+                return;
+            }
+
+            SetInfoType(type);
+
+            const item = Array.from(
+                document.querySelectorAll("[data-share-type][data-share-id]")
+            ).find(element =>
+                element.dataset.shareId === itemId &&
+                element.dataset.shareType === type
+            );
+
+            if (!item) {
+                return;
+            }
+
+            setTimeout(() => {
+
+                item.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                item.classList.add("shared-item-highlight");
+
+                setTimeout(() => {
+                    item.classList.remove("shared-item-highlight");
+                }, 4000);
+
+            }, 350);
+
+        }
+
+
+        document.querySelectorAll("[data-share-button]").forEach(button => {
+
+            button.addEventListener("click", event => {
+
+                shareItem(
+                    event,
+                    button.dataset.shareType,
+                    button.dataset.shareId,
+                    button.dataset.shareTitle
+                );
+
+            });
+
         });
 
-        const activeTab = document.getElementById(`${info_type}-div`);
 
-        activeTab.style.display = "flex";
-        void activeTab.offsetWidth;
-        activeTab.classList.add("tab-enter");
-    }
+        SetInfoType("sources");
 
-    function SetInfoType(type){
-        info_type = type;
-        const sources_div = document.getElementById("sources-select-button");
-        const tips_div = document.getElementById("tips-select-button");
-        const videos_div = document.getElementById("videos-select-button");
-        if(info_type == "sources"){
-            sources_div.classList.add("selected-info-type");
-            tips_div.classList.remove("selected-info-type");
-            videos_div.classList.remove("selected-info-type");
+        openSharedItem();
+
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/static/sw.js");
         }
-        else if(info_type == "tips"){
-            sources_div.classList.remove("selected-info-type");
-            tips_div.classList.add("selected-info-type");
-            videos_div.classList.remove("selected-info-type");
-        }
-        else if(info_type == "videos"){
-            sources_div.classList.remove("selected-info-type");
-            tips_div.classList.remove("selected-info-type");
-            videos_div.classList.add("selected-info-type");
-        }
-              
-        RenderContent();
-    }
-    
-    SetInfoType("sources");
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/static/sw.js");
-}
-</script>
+
+    </script>
+
+</body>
 </html>
