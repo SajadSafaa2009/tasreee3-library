@@ -491,21 +491,13 @@
     const link = url.toString();
 
     const shareText =
-        `مكتبة سرع\n` +
-        `━━━━━━━━━━━━━━\n` +
-        `عنوان المحتوى: ${itemTitle}\n\n` +
-        `يمكنك مشاهدة المحتوى من الرابط التالي:\n${link}\n` +
-        `━━━━━━━━━━━━━━`;
+        `🌐 مكتبة سرع\n` +
+        `${itemTitle}\n` +
+        `${link}`;
 
-    try {
-        if (navigator.share) {
-            await navigator.share({
-                title: itemTitle,
-                text: shareText
-            });
-        } else if (navigator.clipboard && window.isSecureContext) {
+    const copyToClipboard = async () => {
+        if (navigator.clipboard && window.isSecureContext) {
             await navigator.clipboard.writeText(shareText);
-            alert("تم نسخ رسالة المشاركة بنجاح");
         } else {
             const temporaryInput = document.createElement("textarea");
             temporaryInput.value = shareText;
@@ -514,10 +506,27 @@
 
             document.body.appendChild(temporaryInput);
             temporaryInput.select();
-            document.execCommand("copy");
+
+            const copied = document.execCommand("copy");
             temporaryInput.remove();
 
-            alert("تم نسخ رسالة المشاركة بنجاح");
+            if (!copied) {
+                throw new Error("Clipboard copy failed");
+            }
+        }
+
+        alert("تم نسخ رسالة المشاركة بنجاح");
+    };
+
+    try {
+        if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            await navigator.share({
+                title: itemTitle,
+                text: `🌐 مكتبة سرع\n${itemTitle}`,
+                url: link
+            });
+        } else {
+            await copyToClipboard();
         }
     } catch (error) {
         if (error.name !== "AbortError") {
