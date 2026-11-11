@@ -518,45 +518,59 @@
 
 
         function openSharedItem() {
+    const params = new URLSearchParams(window.location.search);
 
-            const params = new URLSearchParams(window.location.search);
+    const type = params.get("tab");
+    const itemId = params.get("item");
 
-            const type = params.get("tab");
-            const itemId = params.get("item");
+    if (!["sources", "videos"].includes(type) || !itemId) {
+        return;
+    }
 
-            if (!["sources", "videos"].includes(type) || !itemId) {
-                return;
-            }
+    SetInfoType(type);
 
-            SetInfoType(type);
+    const item = Array.from(
+        document.querySelectorAll("[data-share-type][data-share-id]")
+    ).find(element =>
+        element.dataset.shareId === itemId &&
+        element.dataset.shareType === type
+    );
 
-            const item = Array.from(
-                document.querySelectorAll("[data-share-type][data-share-id]")
-            ).find(element =>
-                element.dataset.shareId === itemId &&
-                element.dataset.shareType === type
-            );
+    if (!item) {
+        return;
+    }
 
-            if (!item) {
-                return;
-            }
+    const scroller = item.closest(".content-encapsule-div");
 
-            setTimeout(() => {
+    if (!scroller) {
+        return;
+    }
 
-                item.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
+    const scrollToItem = () => {
+        const itemRect = item.getBoundingClientRect();
+        const scrollerRect = scroller.getBoundingClientRect();
 
-                item.classList.add("shared-item-highlight");
+        const itemPosition = itemRect.top - scrollerRect.top;
 
-                setTimeout(() => {
-                    item.classList.remove("shared-item-highlight");
-                }, 4000);
+        const targetPosition = Math.max(
+            0,
+            (scroller.clientHeight - item.offsetHeight) / 2
+        );
 
-            }, 350);
+        scroller.scrollTo({
+            top: scroller.scrollTop + itemPosition - targetPosition,
+            behavior: "smooth"
+        });
 
-        }
+        item.classList.add("shared-item-highlight");
+
+        setTimeout(() => {
+            item.classList.remove("shared-item-highlight");
+        }, 4000);
+    };
+
+    setTimeout(scrollToItem, 500);
+}
 
 
         document.querySelectorAll("[data-share-button]").forEach(button => {
